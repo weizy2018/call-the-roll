@@ -47,16 +47,40 @@ export default {
     methods: {
         submitForm (formName) {
             this.$refs[formName].validate((valid) => {
-                console.log("user: ", this.user);
                 if (valid) {
-                    this.$message({
-                        message: '登陆成功',
-                        type: 'success'
-                    });
-                    this.$router.push('/classes');
+                    // this.$message({
+                    //     message: '登陆成功',
+                    //     type: 'success'
+                    // });
+                    this.$axios.post("http://localhost:8080/login", {
+                        name: this.user.name,
+                        password: this.user.password
+                    })
+                    .then((response) => {
+                        if (response.data.code == 0) {
+                            this.$message.error("用户名货密码错误");
+                            this.user.password = "";
+                        } else {
+                            window.sessionStorage.setItem("user", JSON.stringify(response.data.data));
+                            this.$message({
+                                message: "登陆成功",
+                                type: "success"
+                            })
+                            this.$router.push({
+                                name: "classes", 
+                            });
+                        }
+                    })
+                    .catch((error) => {
+                        console.log("error: ", error);
+                        this.$message.error("系统异常");
+                        return;
+                    })
+
+                    // this.$router.push('/classes');
                 } else {
-                    this.$message.error('用户名或者密码错误');
-                    this.password = '';
+                    // this.$message.error('用户名或者密码错误');
+                    // this.password = '';
                     return;
                 }
             })

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="student">
+
+    <select id="getStudents" resultType="com.school.entity.Student">
+        SELECT  s.id,
+                s.student_id studentId,
+                s.name,
+                s.sex
+        FROM student s LEFT JOIN student_grade sg on s.id = sg.student_id
+        WHERE sg.grade_id = #{gradeId}
+    </select>
+
+    <insert id="addStudent" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO student(student_id, name, sex)
+        VALUES (#{studentId}, #{name}, #{sex})
+    </insert>
+
+    <update id="updateStudent">
+        UPDATE student
+        SET student_id =  #{studentId}, name = #{name}, sex = #{sex}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteStudent">
+        DELETE FROM student WHERE id = #{id}
+    </delete>
+
+</mapper>

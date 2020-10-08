@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="grade">
+    <select id="getGradeByUserId" resultType="com.school.entity.Grade">
+        SELECT g.id,
+               g.name,
+               g.create_time createTime
+        FROM grade g LEFT JOIN user_grade ug on g.id = ug.grade_id
+        WHERE ug.user_id = #{userId}
+    </select>
+
+    <insert id="addGrade" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO grade(name, create_time)
+        VALUES(#{name}, #{createTime})
+    </insert>
+
+</mapper>
